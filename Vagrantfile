@@ -89,7 +89,7 @@ echo 'Environment="KUBELET_EXTRA_ARGS=--node-ip=10.0.0.10"' | \
 #curl -Lo kube-flannel.yml \
  #  https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
 #sed -i.bak -e "s/ip-masq/ip-masq\\n        - --iface=eth1/g" kube-flannel.yml
-kubectl apply -f https://github.com/agarciafer/kubernetes/blob/master/kube-flannel.yml
+kubectl -n kube-system apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
 
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
