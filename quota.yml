@@ -1,0 +1,9 @@
+kind: ResourceQuota
+apiVersion: v1
+metadata:
+  name: preproduccion
+  namespace: preproduccion
+spec:
+  hard:
+    pods: '10'
+    limits.memory: 2Gi
