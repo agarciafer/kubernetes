@@ -1,0 +1,88 @@
+##Procedimiento realizado con kubernetes v1.18.3
+
+##Para el correcto funcionamiento tendremos que tener instalado en kubernetes la API metrics-server:
+https://github.com/kubernetes-sigs/metrics-server
+
+kubectl apply -f metrics-server.yaml
+ kubectl api-versions
+##Tendremos que tener instalado metrics.k8s.io/v1beta1 
+
+##Si todo ha ido correcto tenemos que ver las estadisticas de lo nodes y pods
+kubectl top nodes
+kubectl top pods
+
+--------------------------------------------------------------------------------------------------
+
+
+##Install helm:
+https://helm.sh/docs/intro/install/
+
+From the Binary Releases
+
+
+Download your desired version
+https://github.com/helm/helm/releases
+
+(Unpack it (tar -zxvf helm-v3.0.0-linux-amd64.tar.gz)
+ Find the helm binary in the unpacked directory, and move it to its desired destination
+ (mv linux-amd64/helm /usr/local/bin/helm)
+
+------------------------------------------------------------------------------------------------------
+
+
+##Instalamos el repo stable de helm y prometheus-operator
+
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo list
+helm repo update
+
+helm install prometheus-operator stable/prometheus-operator
+
+##Editamos el servicio de grafana para entrar a traves de nodeport:
+kubectl edit service prometheus-operator-grafana
+
+Cambiamos  type: ClusterIP por  type: NodePort
+
+
+##Entramos a un worker a traves del nodeport asignado:
+http://10.0.0.12:31920/login
+
+user:admin
+password: prom-operator  
+
+--------------------------------------------------------------------------------------------------------
+
+##Install Web UI (Dashboard)
+https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+
+##Accessing the Dashboard UI
+To protect your cluster data, Dashboard deploys with a minimal RBAC configuration by default. 
+Currently, Dashboard only supports logging in with a Bearer Token. To create a token for this demo, 
+you can follow our guide on creating a sample user.
+
+https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
+
+
+kubectl apply -f service service-account.yml
+kubectl apply -f service ClusterRoleBinding.yml
+
+kubectl get all -n kubernetes-dashboard
+
+##Editomos el servicio y lo ponemos de tipo NodePort:
+kubectl edit  service/kubernetes-dashboard -n kubernetes-dashboard
+
+##Accedemos a traves de un worker:
+https://10.0.0.11:32425/#/login
+
+##Para obtener el token de autenticacion:
+##Getting a Bearer Token
+
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+
+
+
+
+
+
