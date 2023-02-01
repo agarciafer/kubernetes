@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
   config.vm.provider :virtualbox do |v|
-  config.vm.boot_timeout = 400
-    v.memory = 2048
+  config.vm.boot_timeout = 1200
+    v.memory = 4096
     v.cpus = 1
   end
 
@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
 
   %w{worker1 worker2}.each_with_index do |name, i|
     config.vm.define name do |worker|
-	config.vm.boot_timeout = 400    
+	config.vm.boot_timeout = 1200    
       worker.vm.box = "learnk8s/networking"
       worker.vm.box_version = "2.0.0"
       worker.vm.hostname = name
