@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: my-nfs-pod
+  labels:
+    app: helloworld
 spec:
   containers:
     - name: my-container
-      labels:
-        app: helloworld
       image: nginx
       volumeMounts:
         - name: nfs-volume
