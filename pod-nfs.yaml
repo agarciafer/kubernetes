@@ -5,6 +5,8 @@ metadata:
 spec:
   containers:
     - name: my-container
+      labels:
+        app: helloworld
       image: nginx
       volumeMounts:
         - name: nfs-volume
@@ -13,4 +15,4 @@ spec:
     - name: nfs-volume
       nfs:
         server: 10.0.0.10
-        path: /web
+        path: /bd-nfs
